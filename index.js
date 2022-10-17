@@ -5,7 +5,7 @@ const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
-const PORT = process.env.PORT || 2005
+const PORT = process.env.PORT || 3000
 
 app.get("/", (req, res) => {
 res.json({"message": "the app is working"})})

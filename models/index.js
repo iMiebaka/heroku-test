@@ -1,18 +1,13 @@
 const mongoose = require("mongoose");
 
-const NAMESPACE = "Database"
 
-
-console.log(process.env.DATABASE_URL);
 mongoose
-    // .connect("mongodb://localhost/notedb")
     .connect(process.env.DATABASE_URL)
-    // .connect(db)
     .then(() => {
         console.log("Database Connected and open for business");
     })
     .catch((e) => {
-        // console.log(e);
+        console.log(e.message);
         console.log("Cannot connect to database");
     });
 

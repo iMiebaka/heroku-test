@@ -1,6 +1,8 @@
 const express = require("express")
 const app = express()
+require("dotenv/config")
 
+console.log(process.env.DATABASE_URL)
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())

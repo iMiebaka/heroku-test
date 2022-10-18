@@ -15,7 +15,8 @@ app.get("/", (req, res) => {
 })
 
 app.get("/:id", (req, res) => {
-  const notes = Notes.find(userId)
+  const { id } = req.params
+  const notes = Notes.find({ userId: id })
   res.json({ data: notes })
 })
 

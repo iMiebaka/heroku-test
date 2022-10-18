@@ -1,8 +1,7 @@
 const express = require("express")
 const app = express()
 require("dotenv/config")
-
-console.log(process.env.DATABASE_URL)
+const Notes = require("./models")
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -11,14 +10,22 @@ app.set("view engine", "ejs")
 const PORT = process.env.PORT || 3000
 
 app.get("/", (req, res) => {
-  res.json({message: "the api is working. checking auto deploy"})
+  const notes = Notes.find()
+  res.json({ data: notes })
 })
 
-app.get("/page", (req, res) => {
- res.render("index")
+app.get("/:id", (req, res) => {
+  const notes = Notes.find(userId)
+  res.json({ data: notes })
+})
+
+app.post("/", (req, res) => {
+  const notes = new Notes(req.body)
+  notes.save()
+  res.json({ message: "Data saved" })
 })
 
 
 app.listen(PORT, () => {
-console.log("Server is running on " + PORT)
+  console.log("Server is running on " + PORT)
 })

@@ -10,9 +10,10 @@ app.use(express.json())
 const PORT = process.env.PORT || 3000
 
 app.get("/", (req, res) => {
-res.json({"message": "the api is working. checking auto deploy"})})
+  res.json({message: "the api is working. checking auto deploy"})
+})
 
 
 app.listen(PORT, () => {
-console.log("Server is running")
+console.log("Server is running on " + PORT)
 })

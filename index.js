@@ -9,15 +9,15 @@ app.set("view engine", "ejs")
 
 const PORT = process.env.PORT || 3000
 
-app.get("/", (req, res) => {
-  const notes = Notes.find()
+app.get("/", async (req, res) => {
+  const notes = await Notes.find()
   console.log(notes);
-  res.json({ data: JSON.stringify(notes) })
+  res.json({ data: notes })
 })
 
-app.get("/:id", (req, res) => {
+app.get("/:id", async (req, res) => {
   const { id } = req.params
-  const notes = Notes.find({ userId: id })
+  const notes = await Notes.find({ userId: id })
   res.json({ data: notes })
 })
 

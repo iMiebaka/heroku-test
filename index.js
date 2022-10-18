@@ -11,7 +11,8 @@ const PORT = process.env.PORT || 3000
 
 app.get("/", (req, res) => {
   const notes = Notes.find()
-  res.json({ data: notes })
+  console.log(notes);
+  res.json({ data: JSON.stringify(notes) })
 })
 
 app.get("/:id", (req, res) => {

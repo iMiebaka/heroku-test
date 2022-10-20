@@ -45,7 +45,17 @@ app.get("/", isLoggedIn, async (req, res) => {
   }
 })
 
-app.get("/:id", isLoggedIn, async (req, res) => {
+app.get("/find-post", isLoggedIn, async (req, res) => {
+  try {
+    const notes = await Notes.find({userId: res.locals.user})
+    res.json({ data: notes })
+  }
+  catch (e) {
+    res.status(400).json({ message: "Could not get item" })
+  }
+})
+
+app.get("/find-post/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params
     const notes = await Notes.find({ userId: id })
@@ -53,6 +63,29 @@ app.get("/:id", isLoggedIn, async (req, res) => {
   }
   catch (e) {
     res.status(400).json({ message: "Could not get item" })
+  }
+})
+
+app.get("/profile", isLoggedIn, async (req, res) => {
+  try {
+    const { id } = req.params
+    const users = await User.find({ username: id })
+    res.json({ data: users })
+  }
+  catch (e) {
+    res.status(400).json({ message: "Could not get user" })
+  }
+})
+
+
+app.get("/profile/:id", isLoggedIn, async (req, res) => {
+  try {
+    const { id } = req.params
+    const users = await User.find({ username: id })
+    res.json({ data: users })
+  }
+  catch (e) {
+    res.status(400).json({ message: "Could not get user" })
   }
 })
 

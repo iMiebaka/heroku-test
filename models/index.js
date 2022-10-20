@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const { v4 } = require("uuid")
 
 mongoose
     .connect(process.env.DATABASE_URL)
@@ -20,9 +20,27 @@ const NotesScheme = new mongoose.Schema({
         type: String,
     },
     userId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
+        ref: "User"
     },
 });
 const Notes = mongoose.model("Notes", NotesScheme)
 
-module.exports = Notes;
+const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+    },
+    email: {
+        type: String,
+    },
+    password: {
+        type: String,
+    },
+    publicId: {
+        type: String,
+        default: v4(),
+    },
+})
+
+const User = mongoose.model("User", UserSchema)
+module.exports = { Notes, User };

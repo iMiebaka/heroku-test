@@ -58,7 +58,7 @@ app.get("/find-post", isLoggedIn, async (req, res) => {
 app.get("/find-post/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params
-    const notes = await Notes.find({ userId: id })
+    const notes = await Notes.find({ _id: id })
     res.json({ data: notes })
   }
   catch (e) {
@@ -103,7 +103,7 @@ app.post("/", isLoggedIn, (req, res) => {
   }
 })
 
-app.post("/account/login", async (req, res) => {
+app.post(" ", async (req, res) => {
   const { email, password } = req.body;
   if (email == undefined || password == undefined) return res.status(400).json({ message: "Field(s) not defined" });
 
@@ -141,6 +141,7 @@ app.post("/account/signup", async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
+    const check = User.findOne({})
     const user = new User({
       username: username,
       email: email,

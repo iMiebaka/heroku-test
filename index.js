@@ -103,7 +103,7 @@ app.post("/", isLoggedIn, (req, res) => {
   }
 })
 
-app.post(" ", async (req, res) => {
+app.post("/account/login", async (req, res) => {
   const { email, password } = req.body;
   if (email == undefined || password == undefined) return res.status(400).json({ message: "Field(s) not defined" });
 

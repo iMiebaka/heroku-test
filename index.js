@@ -1,8 +1,19 @@
 const express = require("express")
-require("dotenv/config")
 const app = express()
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const server = require('http').createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+// const io = require('socket.io').Server(server);
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require("swagger-jsdoc"),
+  options = require("./docs/basicInfo")
+
+require("dotenv/config")
+
+
 
 const { Notes, User } = require("./models")
 const cors = require("cors")
@@ -12,7 +23,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.set("view engine", "ejs")
 
-const PORT = process.env.PORT || 3001
+
 
 const isLoggedIn = async (req, res, next) => {
   const bearerHearder = req.headers?.["authorization"];
@@ -34,6 +45,14 @@ const isLoggedIn = async (req, res, next) => {
     return res.status(400).json({ message: "No Authentication header provided" });
   }
 };
+const specs = swaggerJsdoc(options);
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+app.get("/test-socket", (req, res) => {
+  res.render("index")
+})
+
 
 app.get("/", isLoggedIn, async (req, res) => {
   try {
@@ -47,7 +66,7 @@ app.get("/", isLoggedIn, async (req, res) => {
 
 app.get("/find-post", isLoggedIn, async (req, res) => {
   try {
-    const notes = await Notes.find({userId: res.locals.user})
+    const notes = await Notes.find({ userId: res.locals.user })
     res.json({ data: notes })
   }
   catch (e) {
@@ -156,7 +175,25 @@ app.post("/account/signup", async (req, res) => {
 
 
 
+const PORT = process.env.PORT || 3001
 
-app.listen(PORT, () => {
+
+io.on('connection', function (client) {
+  client.on("user_join", function (data) {
+    this.username = data;
+    client.broadcast.emit("user_join", data);
+  });
+  
+  client.on("chat_message", function (data) {
+    data.username = this.username;
+    client.broadcast.emit("chat_message", data);
+  });
+
+  client.on("disconnect", function (data) {
+    client.broadcast.emit("user_leave", this.username);
+  });
+});
+
+server.listen(PORT, () => {
   console.log("Server is running on " + PORT)
 })

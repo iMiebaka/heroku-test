@@ -79,7 +79,8 @@
         const socket = io();
         form.addEventListener("submit", function (event) {
             event.preventDefault();
-
+            if(input.value.length > 0){
+            
             addMessage(username + ": " + input.value);
             socket.emit("chat_message", {
                 message: input.value
@@ -87,6 +88,7 @@
 
             input.value = "";
             return false;
+            }
         }, false);
 
         socket.on("chat_message", function (data) {

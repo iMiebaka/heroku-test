@@ -9,7 +9,7 @@ const io = new Server(server);
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require("swagger-jsdoc"),
-  options = require("./docs/basicInfo")
+  options = require("./docs")
 
 require("dotenv/config")
 
@@ -185,7 +185,7 @@ io.on('connection', function (client) {
   });
   
   client.on("chat_message", function (data) {
-    data.username = this.username;
+    // data.username = this.username;
     client.broadcast.emit("chat_message", data);
   });
 

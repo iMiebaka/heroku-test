@@ -83,7 +83,8 @@
             
             addMessage(username + ": " + input.value);
             socket.emit("chat_message", {
-                message: input.value
+                message: input.value,
+                username
             });
 
             input.value = "";

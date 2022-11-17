@@ -245,16 +245,16 @@ transporter.verify(function (error, success) {
 });
 
 
-transporter.sendMail({
-  from: '"Fred Foo 👻" <foo@example.com>', // sender address
-  to: "miebakaiwarri@gmail.com", // list of receivers
-  subject: "using env keys", // Subject line
-  text: "Trying from the server with env keys", // plain text body
-  html: "<b>Hello world env keys</b>", // html body
-}).then(info => {
-  console.log(info.response);
-  console.log(info.messageId);
-})
+// transporter.sendMail({
+//   from: '"Fred Foo 👻" <foo@example.com>', // sender address
+//   to: "miebakaiwarri@gmail.com", // list of receivers
+//   subject: "using env keys", // Subject line
+//   text: "Trying from the server with env keys", // plain text body
+//   html: "<b>Hello world env keys</b>", // html body
+// }).then(info => {
+//   console.log(info.response);
+//   console.log(info.messageId);
+// })
 
 const PORT = process.env.PORT || 3001
 

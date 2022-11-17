@@ -226,7 +226,7 @@ const transporter = nodemailer.createTransport({
   secure: true, // use TLS
   auth: {
     user: "miebakaiwarri.dev@gmail.com",
-    pass: "kaqacjgyatgaurqc",
+    pass: process.env.EMAIL_PASSWORD,
   },
   tls: {
     // do not fail on invalid certs
@@ -248,9 +248,9 @@ transporter.verify(function (error, success) {
 transporter.sendMail({
   from: '"Fred Foo 👻" <foo@example.com>', // sender address
   to: "miebakaiwarri@gmail.com", // list of receivers
-  subject: "Miebaka's server test", // Subject line
-  text: "Trying from the server", // plain text body
-  html: "<b>Hello world</b>", // html body
+  subject: "using env keys", // Subject line
+  text: "Trying from the server with env keys", // plain text body
+  html: "<b>Hello world env keys</b>", // html body
 }).then(info => {
   console.log(info.response);
   console.log(info.messageId);

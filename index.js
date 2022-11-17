@@ -16,7 +16,8 @@ require("dotenv/config")
 
 
 const { Notes, User } = require("./models")
-const cors = require("cors")
+const cors = require("cors");
+const axios = require("axios");
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
@@ -173,7 +174,87 @@ app.post("/account/signup", async (req, res) => {
   }
 });
 
+// const DOMAIN = "https://api.mailgun.net/v3/sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org"
+// // const DOMAIN = "sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org"
+// const apiKey = "key-99cec63ccdaabe701dcc5cc60bb4b1ca"
+// const data = {
+//   from: `Excited User <mailgun@${DOMAIN}>`,
+//   to: "miebakaiwarri.dev@gmail.com",
+//   subject: "Hello",
+//   text: "Testing some Mailgun awesomness!"
+// }
 
+// axios.post(`https://api.mailgun.net/v3/${DOMAIN}/messages`, data,
+//   {
+//     auth: {
+//       username: "api",
+//       password: apiKey,
+//     },
+//     headers: {
+//       "Content-Type": "application/x-www-form-urlencoded"
+//     }
+//   }
+// )
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err.message))
+
+  // curl -s --user 'api:820c467a974326591ccb48c3842222ef-2de3d545-e095ad56' https://api.mailgun.net/v3/sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org/messages -F from='Excited User <mailgun@https://api.mailgun.net/v3/sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org>' -F to=YOU@https://api.mailgun.net/v3/sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org 	-F to=miebakaiwarri@gmail.com -F subject='Hello' -F text='Testing some Mailgun awesomeness!'
+
+// const mailgun = require("mailgun-js");
+// const DOMAIN = "sandbox79ac47a5e89546bca0eb0096053979ce.mailgun.org"
+// const mg = mailgun({ apiKey: "820c467a974326591ccb48c3842222ef-2de3d545-e095ad56", domain: DOMAIN });
+// const data = {
+//   from: 'Excited User <me@samples.mailgun.org>',
+//   to: 'miebakaiwarri.dev@gmail.com',
+//   subject: 'Hello',
+//   text: 'Testing some Mailgun awesomness!'
+// };
+// mg.messages().send(data, function (error, body) {
+//   if (error) {
+//     console.log(error.message);
+//   }
+//   else{
+//     console.log(body);
+//   }
+// })
+const nodemailer = require("nodemailer");
+
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use TLS
+  auth: {
+    user: "miebakaiwarri.dev@gmail.com",
+    pass: "kaqacjgyatgaurqc",
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
+  },
+});
+
+
+// verify connection configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Server is ready to take our messages");
+  }
+});
+
+
+transporter.sendMail({
+  from: '"Fred Foo 👻" <foo@example.com>', // sender address
+  to: "miebakaiwarri@gmail.com", // list of receivers
+  subject: "Miebaka's server test", // Subject line
+  text: "Trying from the server", // plain text body
+  html: "<b>Hello world</b>", // html body
+}).then(info => {
+  console.log(info.response);
+  console.log(info.messageId);
+})
 
 const PORT = process.env.PORT || 3001
 
@@ -183,7 +264,7 @@ io.on('connection', function (client) {
     this.username = data;
     client.broadcast.emit("user_join", data);
   });
-  
+
   client.on("chat_message", function (data) {
     // data.username = this.username;
     client.broadcast.emit("chat_message", data);

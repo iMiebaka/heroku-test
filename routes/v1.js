@@ -88,7 +88,7 @@ router.post("/account/login", async (req, res) => {
         const checkPassword = await bcrypt.compare(password, user.password);
         if (checkPassword) {
             // @ts-ignore
-            var token = jwt.sign({ user: user.publicId }, process.env.SECRET_KEY);
+            var token = jwt.sign({ user: user.publicId }, process.env.SECRET_KEY || "secret");
             return res.status(200).json({
                 message: "Login successfull",
                 data: { id: user.publicId, token },
@@ -116,7 +116,10 @@ router.post("/account/signup", async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
-        const check = User.findOne({})
+        const check = await User.findOne().or([{ username }, { email }]);
+        if(check){
+            return res.status(400).json({ message: "User already exist" });
+        }
         const user = new User({
             username: username,
             email: email,

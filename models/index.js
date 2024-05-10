@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const { v4 } = require("uuid")
 
+mongoose.set('strictQuery', true)
 mongoose
-    .connect(process.env.DATABASE_URL)
+    .connect(process.env.DATABASE_URL || "mongodb://localhost:27017/heroku-test")
     .then(() => {
         console.log("Database Connected and open for business");
     })
